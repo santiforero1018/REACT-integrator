@@ -1,11 +1,12 @@
-import { Task } from "./taskCard";
+import { Task } from "./taskCard"
 
-export function TaskList (props){
-   const {list} = props;
+export function TaskList(props){
 
-   return <ul>
-    {
+    const {list} = props;
+
+    return <ul>
+       {
         list.map(task => (<Task name={task.name}/>))
-    }
-   </ul>
+       }
+    </ul>
 }

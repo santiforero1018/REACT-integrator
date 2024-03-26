@@ -1,4 +1,6 @@
-export function Task(props){
+export function Task(props) {
     const {name} = props;
-    return <li>{name}</li>
+    return <li>
+        <h3>{name}</h3>
+    </li>
 }
