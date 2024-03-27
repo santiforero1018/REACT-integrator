@@ -5,40 +5,48 @@ export function TaskList(props) {
 
     const { list } = props;
 
-    const [tasks, setTask] = useState(list);
+    const [tasks, setTask] = useState(list || []);
     const [newTaskName, setNewTaskName] = useState("");
-
 
     // Add task handling function
 
     const addTask = (name) => {
-
-        setTask([...tasks, { name, isComplete: false }]);
-
+        const newTasks = [...tasks, { name, isComplete: false }]
+        setTask(newTasks);
+        localStorage.setItem('tasks', JSON.stringify(newTasks));
         setNewTaskName("");
 
     };
     // function to check a task
     const handleCheckClick = (Etask) => {
-        
 
+        let newChecks;
         if (!tasks.some(task => task.name === Etask.name)) {
             console.log("tasks checked: " + Etask.name);
-            setTask([...tasks, Etask]);
+            newChecks = [...tasks, Etask];
         } else {
             console.log("tasks unchecked: " + Etask.name);
-            setTask(tasks.map(task => task.name === Etask.name ? { ...task, isComplete: !task.isComplete } : task));
+            newChecks = tasks.map(task => task.name === Etask.name ? { ...task, isComplete: !task.isComplete } : task);
         }
+
+        setTask(newChecks);
+        localStorage.setItem('tasks', JSON.stringify(newChecks));
     }
 
     // function to remove a task
     const handleRemoveClick = (Etask) => {
-
         console.log("task removed: " + Etask.name);
-
-        setTask([...tasks].filter(task => Etask != task));
-
+        const newTasks = [...tasks].filter(task => Etask != task);
+        setTask(newTasks);
+        localStorage.setItem('tasks', JSON.stringify(newTasks));
     }
+
+    useEffect(() => {
+        const savedTasks = JSON.parse(localStorage.getItem("tasks"));
+        if (savedTasks) {
+            setTask(savedTasks);
+        }
+    }, []);
 
     return (
         <>
@@ -46,7 +54,7 @@ export function TaskList(props) {
                 type="text"
                 value={newTaskName}
                 onChange={(e) => setNewTaskName(e.target.value)}
-                placeholder="Enter new todo"/>
+                placeholder="Enter new todo" />
             <button type="button" onClick={() => addTask(newTaskName)}>+</button>
             <ul>
                 {
